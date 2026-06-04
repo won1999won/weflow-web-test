@@ -1,0 +1,124 @@
+export const links = {
+  kakao: 'http://pf.kakao.com/_xntCbX',
+  blog: 'https://m.blog.naver.com/weflowlab',
+  instagram: 'https://www.instagram.com/weflowlab.kr?igsh=b2c1eTdwbHo2bWRt',
+  github: 'https://github.com/lmg90219679-eng/weflow-web',
+};
+
+export const navLinks = [
+  { label: '홈', href: '/' },
+  { label: '서비스', href: '/services' },
+  { label: '제작플랜 & 가격안내', href: '/pricing' },
+  { label: '성공사례', href: '/cases' },
+  { label: '예약', href: '/reservation' },
+];
+
+export const productionPlans = [
+  {
+    tier: 'START',
+    name: '랜딩페이지',
+    original: '498,000원',
+    price: '249,000원',
+    features: ['랜딩페이지 1페이지', '3~4일 빠른 제작기간', '반응형 제작 (PC/모바일)', '문의폼 연동', '기본 SEO 설정'],
+  },
+  {
+    tier: 'GROW',
+    name: '홈페이지',
+    original: '1,980,000원',
+    price: '990,000원',
+    features: ['홈페이지 5페이지', '1주 빠른 제작기간', '반응형 제작 (PC/모바일)', '문의폼 연동', '카카오톡 상담연동', '기본 SEO 설정'],
+  },
+  {
+    tier: 'MASTER',
+    name: '프리미엄',
+    original: '2,980,000원',
+    price: '1,490,000원',
+    featured: true,
+    features: ['홈페이지 + 랜딩페이지', '1~2주 빠른 제작기간', '반응형 제작 (PC/모바일)', '프리미엄 디자인', '예약·문의 시스템', 'SEO 최적화', '광고 전환 구조 설계'],
+  },
+];
+
+export const carePlans = [
+  {
+    name: 'WE CARE',
+    subtitle: '기본 관리 플랜',
+    original: '월 170,000원',
+    price: '월 89,000원~',
+    features: ['유지보수 월 1회', '블로그 월 1개', '인스타 월 4회', '스레드 월 4회', 'SEO 상단등록'],
+  },
+  {
+    name: 'FLOW CARE',
+    subtitle: '성장 관리 플랜',
+    original: '월 378,000원~',
+    price: '월 189,000원~',
+    features: ['유지보수 월 3회', '인스타 월 8회', '스레드 월 8회', '블로그 월 2회', '네이버 키워드 세팅 할인', '당근 키워드 광고 세팅 50% 할인', '문의 개선', 'SEO 상단 등록'],
+  },
+  {
+    name: 'WEFLOW CARE',
+    subtitle: '올인원 관리 플랜',
+    original: '월 678,000원~',
+    price: '월 339,000원~',
+    featured: true,
+    features: ['유지보수 무제한', '블로그 월 4회', '인스타 월 12회', '스레드 월 12회', '네이버 키워드/당근 플레이스 광고 세팅 무료', '월 성과 체크', '랜딩 개선', '광고관리', 'SEO 최적화'],
+  },
+];
+
+export const adPlans = [
+  {
+    name: '네이버 광고 (키워드 세팅)',
+    original: '298,000원',
+    price: '149,000원~',
+    features: ['키워드 분석', '광고 세팅 지원', '광고 문구 제작', '문의 구조 연결', '채널 연동 지원', '성과 최적화'],
+  },
+  {
+    name: '당근 플레이스 광고 (키워드 세팅)',
+    original: '158,000원',
+    price: '79,000원~',
+    features: ['지역 키워드 분석', '광고 세팅 지원', '광고 문구 제작', '지역 타겟 설정', '랜딩 연결 지원', '성과 최적화'],
+  },
+];
+
+export const processSteps = [
+  ['01', '상담 · 진단', '업종 및 제작 방향 확인'],
+  ['02', '기획 · 설계', '문의 구조 및 전략 설계'],
+  ['03', '디자인', '브랜드 맞춤 화면 구성'],
+  ['04', '개발 · 테스트', '기능구현, 최적화, 검수 및 수정 진행'],
+  ['05', 'SEO 상단등록', '네이버·구글·사이트맵 등록'],
+  ['06', '광고운영 · 사후관리', '인스타·블로그·스레드·네이버 키워드 광고 운영관리'],
+];
+
+export const cases = [
+  'PT샵', '필라테스', '헬스장', '보험설계', '법률사무소', '자동차디테일링', '렌터카업체', '웨딩스냅업체',
+  '세무사사무소', '공인중개사', '카페', '미용실', '네일샵', '피부관리샵', '왁싱샵', '반영구샵',
+  '애견미용', '반려동물용품점', '키즈카페', '스터디카페', '영어학원', '수학학원', '입시학원', '개인과외',
+  '청소업체', '인테리어업체', '이사업체', '소상공인기업형홈페이지',
+].map((title) => ({
+  title,
+  category: title.includes('샵') || title.includes('필라테스') || title.includes('헬스') ? '피트니스·뷰티' : title.includes('학원') || title.includes('과외') ? '교육' : '비즈니스',
+  img: `/cases_${title}.jpg`,
+  blogHref: links.blog,
+}));
+
+export const reviews = [
+  '문의 버튼 위치 바꾸고 상담 문의가 확실히 늘었어요.',
+  '수정 요청도 빠르게 처리해주셔서 만족합니다.',
+  '디자인보다 문의 구조를 신경 써주는 게 좋았습니다.',
+  '랜딩페이지 제작 후 상담 문의가 늘었어요.',
+  '설명도 쉽게 해주셔서 진행하기 편했습니다.',
+  '광고 연결까지 한 번에 진행돼서 편했어요.',
+  '피드백 속도가 진짜 빨랐습니다.',
+  '모바일 화면이 훨씬 보기 좋아졌어요.',
+  '생각보다 제작 기간이 빨라 놀랐습니다.',
+  '업종 특성에 맞게 잘 만들어주셨어요.',
+  '기획부터 같이 잡아줘서 부담이 없었습니다.',
+  '카카오 문의 연결이 편하게 바뀌었어요.',
+];
+
+export const formTypes = ['랜딩페이지 제작', '홈페이지 제작', '랜딩 & 홈페이지 제작', '기타(WEFLOW 케어플랜)'];
+
+export const footerInfo = {
+  ceo: '대표 : 신서준',
+  bizNo: '사업자등록번호 : 884-07-03480',
+  email: '이메일 : contact@weflowlab.kr',
+  hours: '운영시간 : 연중무휴 24시간 상담가능',
+};

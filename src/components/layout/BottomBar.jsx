@@ -1,35 +1,20 @@
 'use client';
 
 import Link from 'next/link';
-import { BOTTOM_BAR } from '@/data/commonText';
+import { MessageCircle, NotebookText, Phone, Search } from 'lucide-react';
+import { links } from '@/data/siteData';
 
 export default function BottomBar() {
+  const items = [
+    { label: '24시간 상담', href: '/reservation', icon: Phone },
+    { label: '카카오톡문의', href: links.kakao, icon: MessageCircle },
+    { label: '블로그', href: links.blog, icon: NotebookText },
+  ];
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 bg-[#0a0f1e] border-t border-slate-800" style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}>
-      <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-4">
-          {BOTTOM_BAR.map((item) =>
-            item.modal ? (
-              <button
-                key={item.label}
-                onClick={() => window.dispatchEvent(new Event('open-diagnosis-modal'))}
-                className="flex flex-col items-center justify-center py-3 gap-1 text-slate-300 hover:text-white hover:bg-slate-800 transition-colors w-full"
-              >
-                <span className="text-xl">{item.icon}</span>
-                <span className="text-xs font-medium text-center leading-tight">{item.label}</span>
-              </button>
-            ) : (
-              <Link
-                key={item.label}
-                href={item.href}
-                className="flex flex-col items-center justify-center py-3 gap-1 text-slate-300 hover:text-white hover:bg-slate-800 transition-colors"
-              >
-                <span className="text-xl">{item.icon}</span>
-                <span className="text-xs font-medium text-center leading-tight">{item.label}</span>
-              </Link>
-            )
-          )}
-        </div>
+    <div className="fixed inset-x-0 bottom-0 z-50 border-t border-white/10 bg-[#0a0f1e]" style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}>
+      <div className="mx-auto grid max-w-7xl grid-cols-4">
+        {items.map(({ label, href, icon: Icon }) => <Link key={label} href={href} className="flex flex-col items-center gap-1 py-3 text-xs font-semibold text-slate-300 hover:bg-slate-900 hover:text-white"><Icon size={18} />{label}</Link>)}
+        <button onClick={() => window.dispatchEvent(new Event('open-diagnosis-modal'))} className="flex flex-col items-center gap-1 py-3 text-xs font-semibold text-slate-300 hover:bg-slate-900 hover:text-white"><Search size={18} />무료진단</button>
       </div>
     </div>
   );

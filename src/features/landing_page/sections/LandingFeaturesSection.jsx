@@ -87,7 +87,7 @@ export default function LandingFeaturesSection() {
       <div className="py-16 flex flex-col items-center text-center px-4">
         {/* 따옴표 아이콘 */}
         <div className="w-14 h-14 rounded-full bg-blue-900/50 border border-blue-700/30 flex items-center justify-center mb-8">
-          <span className="text-blue-400 text-2xl font-black leading-none select-none">"</span>
+          <span className="text-blue-400 text-2xl font-black leading-none select-none">&quot;</span>
         </div>
 
         {/* 메인 헤드라인 */}

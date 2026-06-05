@@ -428,6 +428,19 @@ export function InquiryForm({ mode = 'inquiry' }) {
   );
 }
 
+function StickyInquiryPanel() {
+  return (
+    <aside className="fixed right-4 top-24 z-40 hidden w-72 xl:block">
+      <div className="mb-3 rounded-lg border border-cyan-400/20 bg-slate-950/90 p-4 shadow-2xl shadow-black/40 backdrop-blur">
+        <p className="text-xs font-black tracking-[0.2em] text-cyan-300">FREE DIAGNOSIS</p>
+        <h2 className="mt-2 text-lg font-black text-white">무료진단 후 견적받기</h2>
+        <p className="mt-2 text-xs leading-5 text-slate-400">24시간 내 빠른 연락과 맞춤 견적 안내</p>
+      </div>
+      <InquiryForm />
+    </aside>
+  );
+}
+
 export function ReservationContent() {
   return (
     <div className="px-4 pb-16 pt-28 sm:px-6 lg:px-8">
@@ -447,6 +460,7 @@ export function ReservationContent() {
 export function LandingContent() {
   return (
     <div className="pt-20">
+      <StickyInquiryPanel />
       <HeroSection />
       <BenefitsSection />
       <ServicesContent />
@@ -515,6 +529,7 @@ export function AdminDashboard() {
 export function HomeContent() {
   return (
     <>
+      <StickyInquiryPanel />
       <HeroSection />
       <BenefitsSection />
       <CasesGrid limit={5} />

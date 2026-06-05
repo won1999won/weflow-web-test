@@ -248,24 +248,143 @@ export function ServicesContent() {
   );
 }
 
+const reservationTimeSlots = ['09:00', '10:00', '11:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00'];
+const weekDays = ['일', '월', '화', '수', '목', '금', '토'];
+
+function formatDateValue(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+function buildCalendarDays(monthDate) {
+  const year = monthDate.getFullYear();
+  const month = monthDate.getMonth();
+  const firstDay = new Date(year, month, 1);
+  const lastDate = new Date(year, month + 1, 0).getDate();
+  const blanks = Array.from({ length: firstDay.getDay() }, (_, index) => ({ key: `blank-${index}`, blank: true }));
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const days = Array.from({ length: lastDate }, (_, index) => {
+    const date = new Date(year, month, index + 1);
+    date.setHours(0, 0, 0, 0);
+    return {
+      key: formatDateValue(date),
+      label: index + 1,
+      value: formatDateValue(date),
+      disabled: date < today,
+    };
+  });
+  return [...blanks, ...days];
+}
+
+function ReservationDateTimePicker({ date, time, onDate, onTime }) {
+  const [monthDate, setMonthDate] = useState(() => {
+    const now = new Date();
+    return new Date(now.getFullYear(), now.getMonth(), 1);
+  });
+  const days = buildCalendarDays(monthDate);
+  const monthLabel = `${monthDate.getFullYear()}년 ${monthDate.getMonth() + 1}월`;
+
+  function moveMonth(delta) {
+    setMonthDate((current) => new Date(current.getFullYear(), current.getMonth() + delta, 1));
+  }
+
+  return (
+    <div className="rounded-lg border border-white/10 bg-slate-950/70 p-4">
+      <div className="mb-4 flex items-center justify-between">
+        <button type="button" onClick={() => moveMonth(-1)} className="rounded-md border border-white/10 px-3 py-1.5 text-xs font-bold text-slate-300 hover:text-white">
+          이전
+        </button>
+        <p className="text-sm font-black text-white">{monthLabel}</p>
+        <button type="button" onClick={() => moveMonth(1)} className="rounded-md border border-white/10 px-3 py-1.5 text-xs font-bold text-slate-300 hover:text-white">
+          다음
+        </button>
+      </div>
+
+      <div className="grid grid-cols-7 gap-1 text-center text-[11px] font-bold text-slate-500">
+        {weekDays.map((day) => <div key={day} className="py-1">{day}</div>)}
+      </div>
+      <div className="mt-1 grid grid-cols-7 gap-1">
+        {days.map((day) => day.blank ? (
+          <div key={day.key} className="aspect-square" />
+        ) : (
+          <button
+            key={day.key}
+            type="button"
+            disabled={day.disabled}
+            onClick={() => onDate(day.value)}
+            className={`aspect-square rounded-md text-sm font-bold transition-colors ${
+              date === day.value
+                ? 'bg-cyan-400 text-slate-950'
+                : day.disabled
+                  ? 'cursor-not-allowed bg-slate-900/40 text-slate-700'
+                  : 'bg-slate-900 text-slate-200 hover:bg-cyan-400/20 hover:text-white'
+            }`}
+          >
+            {day.label}
+          </button>
+        ))}
+      </div>
+
+      <div className="mt-5">
+        <p className="mb-2 text-xs font-bold text-slate-400">상담 시간 선택</p>
+        <div className="grid grid-cols-3 gap-2">
+          {reservationTimeSlots.map((slot) => (
+            <button
+              key={slot}
+              type="button"
+              onClick={() => onTime(slot)}
+              className={`rounded-md border px-3 py-2 text-xs font-bold transition-colors ${
+                time === slot
+                  ? 'border-cyan-300 bg-cyan-300 text-slate-950'
+                  : 'border-white/10 bg-slate-900 text-slate-300 hover:border-cyan-300/50 hover:text-white'
+              }`}
+            >
+              {slot}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="mt-4 rounded-md bg-slate-900/70 px-3 py-2 text-xs text-slate-300">
+        선택 일정: <span className="font-bold text-cyan-300">{date || '날짜 선택 필요'}</span>
+        {' / '}
+        <span className="font-bold text-cyan-300">{time || '시간 선택 필요'}</span>
+      </div>
+    </div>
+  );
+}
+
 export function InquiryForm({ mode = 'inquiry' }) {
-  const [form, setForm] = useState({ name: '', phone: '', type: formTypes[0], industry: '', time: '', request: '', agree: false });
+  const [form, setForm] = useState({ name: '', phone: '', type: formTypes[0], industry: '', date: '', time: '', request: '', agree: false });
   const [done, setDone] = useState(false);
   function update(e) {
     const { name, value, checked, type } = e.target;
     setForm((prev) => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
   }
+  function updateField(name, value) {
+    setForm((prev) => ({ ...prev, [name]: value }));
+  }
   function submit(e) {
     e.preventDefault();
     if (!form.agree) return alert('개인정보 수집 및 상담 동의가 필요합니다.');
+    if (mode === 'reservation' && (!form.date || !form.time)) return alert('상담 날짜와 시간을 선택해 주세요.');
     saveRecord(mode === 'reservation' ? storeKey.reservations : storeKey.inquiries, form);
     setDone(true);
   }
   if (done) return <div className="rounded-lg border border-cyan-400/20 bg-cyan-400/10 p-8 text-center font-bold text-white">접수 완료! 빠른 시간 안에 연락드리겠습니다.</div>;
   return (
     <form onSubmit={submit} className="space-y-4 rounded-lg border border-white/10 bg-slate-900/70 p-6">
-      {mode === 'reservation' && <input type="date" name="date" onChange={update} className="w-full rounded-md border border-white/10 bg-slate-950 px-3 py-3 text-sm text-white" required />}
-      {mode === 'reservation' && <input name="time" placeholder="원하시는 시간대" onChange={update} className="w-full rounded-md border border-white/10 bg-slate-950 px-3 py-3 text-sm text-white" required />}
+      {mode === 'reservation' && (
+        <ReservationDateTimePicker
+          date={form.date}
+          time={form.time}
+          onDate={(value) => updateField('date', value)}
+          onTime={(value) => updateField('time', value)}
+        />
+      )}
       <input name="name" placeholder="이름" onChange={update} className="w-full rounded-md border border-white/10 bg-slate-950 px-3 py-3 text-sm text-white" required />
       <input name="phone" placeholder="연락처" onChange={update} className="w-full rounded-md border border-white/10 bg-slate-950 px-3 py-3 text-sm text-white" required />
       <select name="type" onChange={update} className="w-full rounded-md border border-white/10 bg-slate-950 px-3 py-3 text-sm text-white">{formTypes.map((item) => <option key={item}>{item}</option>)}</select>
@@ -330,15 +449,29 @@ export function AdminDashboard() {
         <div className="mb-5 flex gap-2">{tabs.map((item) => <button key={item.id} onClick={() => setTab(item.id)} className={`rounded-lg px-4 py-2 text-sm font-bold ${tab === item.id ? 'gradient-blue text-white' : 'bg-slate-900 text-slate-300'}`}>{item.label}</button>)}</div>
         <div className="overflow-hidden rounded-lg border border-white/10 bg-slate-900/60">
           <table className="w-full text-left text-sm">
-            <thead className="bg-slate-950 text-slate-300"><tr><th className="p-3">접수일</th><th className="p-3">이름</th><th className="p-3">연락처</th><th className="p-3">종류</th><th className="p-3">상태</th><th className="p-3">관리</th></tr></thead>
+            <thead className="bg-slate-950 text-slate-300">
+              <tr>
+                <th className="p-3">접수일</th>
+                <th className="p-3">이름</th>
+                <th className="p-3">연락처</th>
+                {tab === 'reservations' && <th className="p-3">예약일</th>}
+                {tab === 'reservations' && <th className="p-3">시간</th>}
+                <th className="p-3">종류</th>
+                <th className="p-3">상태</th>
+                <th className="p-3">관리</th>
+              </tr>
+            </thead>
             <tbody>
               {rows.map((row) => (
                 <tr key={row.id} className="border-t border-white/10 text-slate-300">
-                  <td className="p-3">{row.createdAt}</td><td className="p-3">{row.name}</td><td className="p-3">{row.phone}</td><td className="p-3">{row.type}</td><td className="p-3">{row.status}</td>
+                  <td className="p-3">{row.createdAt}</td><td className="p-3">{row.name}</td><td className="p-3">{row.phone}</td>
+                  {tab === 'reservations' && <td className="p-3">{row.date || '-'}</td>}
+                  {tab === 'reservations' && <td className="p-3">{row.time || '-'}</td>}
+                  <td className="p-3">{row.type}</td><td className="p-3">{row.status}</td>
                   <td className="flex gap-2 p-3"><button onClick={() => setStatus(row.id, '진행중')} aria-label={`${row.name} 진행중 처리`} className="rounded bg-blue-500/20 px-2 py-1 text-xs text-blue-200">진행중</button><button onClick={() => setStatus(row.id, '완료')} aria-label={`${row.name} 완료 처리`} className="rounded bg-emerald-500/20 px-2 py-1 text-xs text-emerald-200">완료</button><button onClick={() => remove(row.id)} aria-label={`${row.name} 삭제`} className="rounded bg-red-500/20 px-2 py-1 text-xs text-red-200"><Trash2 size={13} /></button></td>
                 </tr>
               ))}
-              {rows.length === 0 && <tr><td colSpan={6} className="p-8 text-center text-slate-500">저장된 데이터가 없습니다.</td></tr>}
+              {rows.length === 0 && <tr><td colSpan={tab === 'reservations' ? 8 : 6} className="p-8 text-center text-slate-500">저장된 데이터가 없습니다.</td></tr>}
             </tbody>
           </table>
         </div>

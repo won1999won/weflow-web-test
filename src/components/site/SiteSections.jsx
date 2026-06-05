@@ -258,6 +258,12 @@ function formatDateValue(date) {
   return `${year}-${month}-${day}`;
 }
 
+function formatKoreanDate(value) {
+  if (!value) return '';
+  const [year, month, day] = value.split('-').map(Number);
+  return `${year}년 ${month}월 ${day}일`;
+}
+
 function buildCalendarDays(monthDate) {
   const year = monthDate.getFullYear();
   const month = monthDate.getMonth();
@@ -374,7 +380,17 @@ export function InquiryForm({ mode = 'inquiry' }) {
     saveRecord(mode === 'reservation' ? storeKey.reservations : storeKey.inquiries, form);
     setDone(true);
   }
-  if (done) return <div className="rounded-lg border border-cyan-400/20 bg-cyan-400/10 p-8 text-center font-bold text-white">접수 완료! 빠른 시간 안에 연락드리겠습니다.</div>;
+  if (done) return (
+    <div className="rounded-lg border border-cyan-400/20 bg-cyan-400/10 p-8 text-center text-white">
+      <p className="text-lg font-black">{mode === 'reservation' ? '예약 완료!' : '접수 완료!'}</p>
+      {mode === 'reservation' && (
+        <p className="mt-3 text-sm font-bold text-cyan-200">
+          {formatKoreanDate(form.date)} {form.time} 상담으로 예약되었습니다.
+        </p>
+      )}
+      <p className="mt-3 text-sm font-bold text-slate-200">빠른 시간 안에 연락드리겠습니다.</p>
+    </div>
+  );
   return (
     <form onSubmit={submit} className="space-y-4 rounded-lg border border-white/10 bg-slate-900/70 p-6">
       {mode === 'reservation' && (

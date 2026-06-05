@@ -149,6 +149,13 @@ export function CasesGrid({ limit }) {
           <Link href="/cases" className="inline-flex items-center gap-2 rounded-lg border border-white/10 px-5 py-3 text-sm font-bold text-white">더보기 <ArrowRight size={16} /></Link>
         </div>
       )}
+      {!limit && (
+        <div className="mt-8 text-center">
+          <button onClick={() => window.dispatchEvent(new Event('open-diagnosis-modal'))} className="gradient-blue inline-flex items-center gap-2 rounded-lg px-5 py-3 text-sm font-bold text-white">
+            더보기 <ArrowRight size={16} />
+          </button>
+        </div>
+      )}
     </section>
   );
 }
@@ -162,6 +169,7 @@ function PriceCard({ plan }) {
       <div className="mt-5">
         <p className="text-sm text-slate-500 line-through decoration-red-400">{plan.original}</p>
         <p className="mt-1 text-3xl font-black text-white">{plan.price}</p>
+        <p className="mt-1 text-xs font-bold text-cyan-300">VAT 포함</p>
       </div>
       <ul className="mt-6 space-y-3">
         {plan.features.map((item) => (
@@ -189,19 +197,25 @@ export function PricingSections() {
         <SectionTitle title="광고 플랜" desc="네이버 키워드와 당근 플레이스 광고 세팅을 지원합니다." />
         <div className="mx-auto grid max-w-4xl gap-5 md:grid-cols-2">{adPlans.map((plan) => <PriceCard key={plan.name} plan={plan} />)}</div>
         <div className="mx-auto mt-8 max-w-4xl rounded-lg border border-white/10 bg-slate-900/60 p-5 text-sm leading-7 text-slate-400">
-          도메인은 고객님 명의로 등록되며 비용은 별도입니다. WEFLOW에서 연결 세팅은 무료로 지원합니다. 광고비는 고객 계정의 결제수단으로 직접 결제되며 WEFLOW는 운영 및 세팅만 합니다. 유지보수는 텍스트, 이미지, 링크 등 경미한 수정 기준이며 페이지 추가 및 기능 개발은 별도 비용이 발생할 수 있습니다.
+          <p className="font-bold text-white">도메인 및 운영 안내</p>
+          <ul className="mt-3 space-y-2">
+            {['도메인 연결 지원', '도메인 등록 대행 가능', '도메인 비용 별도', '광고비는 고객 계정에서 고객 결제수단으로 직접 결제'].map((item) => (
+              <li key={item} className="flex gap-2"><Check size={16} className="mt-1 shrink-0 text-cyan-300" />{item}</li>
+            ))}
+          </ul>
+          <p className="mt-4">도메인은 고객님 명의로 등록되며 비용은 별도입니다. WEFLOW에서 등록 및 연결 세팅은 무료로 지원합니다. WEFLOW는 광고 운영 및 세팅만 합니다. 유지보수는 텍스트, 이미지, 링크 등 경미한 수정 기준이며 페이지 추가 및 기능 개발은 별도 비용이 발생할 수 있습니다.</p>
         </div>
       </section>
     </div>
   );
 }
 
-export function DiagnosisSection() {
+export function DiagnosisSection({ title = '무료진단 후 나의 개선점 확인해보기', button = '무료진단 후 견적 받기' } = {}) {
   return (
     <section className="px-4 py-16 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-3xl rounded-lg border border-cyan-400/20 bg-cyan-400/10 p-8">
-        <SectionTitle title="무료진단 후 나의 개선점 확인해보기" desc="문의 구조, 디자인·사용성, 검색 노출, 문의 개선 제안을 확인합니다." />
-        <button onClick={() => window.dispatchEvent(new Event('open-diagnosis-modal'))} className="gradient-blue mx-auto flex rounded-lg px-6 py-3 text-sm font-bold text-white">무료진단 후 견적 받기</button>
+        <SectionTitle title={title} desc="문의 구조 진단, 디자인 점검, 검색 노출 분석, 문의 개선 제안을 확인합니다." />
+        <button onClick={() => window.dispatchEvent(new Event('open-diagnosis-modal'))} className="gradient-blue mx-auto flex rounded-lg px-6 py-3 text-sm font-bold text-white">{button}</button>
       </div>
     </section>
   );
@@ -232,6 +246,8 @@ export function ServicesContent() {
     ['인스타 업로드', '피드/릴스 기반 소셜 채널 운영'],
     ['스레드 업로드', '짧은 콘텐츠 기반 바이럴 확산'],
     ['네이버 키워드 업로드', '검색 의도에 맞춘 키워드 광고 세팅'],
+    ['당근플레이스 키워드 업로드', '지역 기반 플레이스 광고 세팅'],
+    ['네이버 서치어드바이저 상단등록', '네이버 검색 노출을 위한 사이트 등록'],
     ['구글 콘솔 상단등록', '검색엔진 최적화와 색인 관리'],
     ['사이트맵 등록', '검색 누락 방지와 상단 노출 기반 구성'],
   ];
@@ -435,7 +451,7 @@ export function LandingContent() {
       <BenefitsSection />
       <ServicesContent />
       <PricingSections />
-      <DiagnosisSection />
+      <DiagnosisSection title="무료진단에서 이런 걸 확인해드립니다" button="문의 늘리는 무료 진단" />
       <ReviewsSection />
     </div>
   );
@@ -501,7 +517,7 @@ export function HomeContent() {
     <>
       <HeroSection />
       <BenefitsSection />
-      <CasesGrid limit={4} />
+      <CasesGrid limit={5} />
       <ProcessSection />
       <DiagnosisSection />
       <ReviewsSection />

@@ -12,7 +12,7 @@ export default function Header() {
     <header className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-[#0a0f1e]/90 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link href="/" className="flex items-center gap-2">
-          <Image src="/logo_icon.png" alt="WEFLOW" width={42} height={42} className="object-contain" />
+          <Image src="/logo_icon.png" alt="WEFLOW" width={42} height={42} className="object-contain" priority />
           <span className="text-xl font-black text-white">WE<span className="text-cyan-300">FLOW</span></span>
         </Link>
         <nav className="hidden items-center gap-6 lg:flex">

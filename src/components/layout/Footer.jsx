@@ -14,7 +14,7 @@ export default function Footer() {
     <footer className="border-t border-white/10 bg-[#080c18] px-4 pb-24 pt-12 sm:px-6 lg:px-8">
       <div className="mx-auto grid max-w-7xl gap-10 md:grid-cols-[1.5fr_1fr_1fr_1fr]">
         <div>
-          <Image src="/logo_icon.png" alt="WEFLOW" width={44} height={44} />
+          <Image src="/logo_icon.png" alt="WEFLOW" width={44} height={44} loading="eager" />
           <p className="mt-4 text-sm leading-7 text-slate-400">제작부터 관리까지<br />비즈니스 성장을 함께합니다.</p>
           <div className="mt-5 space-y-1 text-xs text-slate-500">
             <p>{footerInfo.ceo}</p><p>{footerInfo.bizNo}</p><p>{footerInfo.email}</p><p>{footerInfo.hours}</p>

@@ -310,8 +310,7 @@ export function AdminDashboard() {
   const [tab, setTab] = useState('inquiries');
   const [version, setVersion] = useState(0);
   const key = tab === 'inquiries' ? storeKey.inquiries : storeKey.reservations;
-  const rows = readStore(key);
-  void version;
+  const rows = version >= 0 ? readStore(key) : [];
   function setStatus(id, status) {
     const next = rows.map((row) => (row.id === id ? { ...row, status } : row));
     writeStore(key, next); setVersion((value) => value + 1);
@@ -336,7 +335,7 @@ export function AdminDashboard() {
               {rows.map((row) => (
                 <tr key={row.id} className="border-t border-white/10 text-slate-300">
                   <td className="p-3">{row.createdAt}</td><td className="p-3">{row.name}</td><td className="p-3">{row.phone}</td><td className="p-3">{row.type}</td><td className="p-3">{row.status}</td>
-                  <td className="flex gap-2 p-3"><button onClick={() => setStatus(row.id, '진행중')} className="rounded bg-blue-500/20 px-2 py-1 text-xs text-blue-200">진행중</button><button onClick={() => setStatus(row.id, '완료')} className="rounded bg-emerald-500/20 px-2 py-1 text-xs text-emerald-200">완료</button><button onClick={() => remove(row.id)} className="rounded bg-red-500/20 px-2 py-1 text-xs text-red-200"><Trash2 size={13} /></button></td>
+                  <td className="flex gap-2 p-3"><button onClick={() => setStatus(row.id, '진행중')} aria-label={`${row.name} 진행중 처리`} className="rounded bg-blue-500/20 px-2 py-1 text-xs text-blue-200">진행중</button><button onClick={() => setStatus(row.id, '완료')} aria-label={`${row.name} 완료 처리`} className="rounded bg-emerald-500/20 px-2 py-1 text-xs text-emerald-200">완료</button><button onClick={() => remove(row.id)} aria-label={`${row.name} 삭제`} className="rounded bg-red-500/20 px-2 py-1 text-xs text-red-200"><Trash2 size={13} /></button></td>
                 </tr>
               ))}
               {rows.length === 0 && <tr><td colSpan={6} className="p-8 text-center text-slate-500">저장된 데이터가 없습니다.</td></tr>}
